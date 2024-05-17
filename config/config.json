@@ -5,5 +5,13 @@
     "database": "postgres",
     "host": "127.0.0.1",
     "dialect": "postgres"
+  },
+  "production": {
+    "username": "postgres_oj6x_user",
+    "password": "CrwZOtDxCDdeoYgITijVcMqOH1rYUrEl",
+    "database": "postgres_oj6x",
+    "host": "cp3oui821fec73bbuo50-a.oregon-postgres.render.com",
+    "dialect": "postgres",
+    "port": 5432
   }
 }
