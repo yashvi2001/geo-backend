@@ -101,5 +101,27 @@ app.post("/upload", upload.single("file"), (req, res) => {
   }
 });
 
+//add a route to get all the geojson data
+
+app.get("/data", (req, res) => {
+  DB.geojsondata
+    .findAll()
+    .then((geojsondata) => {
+      //send in the format of id and data
+
+      const data = geojsondata.map((geojson) => {
+        return {
+          id: geojson.id,
+          data: geojson.data,
+        };
+      });
+      res.status(200).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Failed to get geojson data.");
+    });
+});
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Server is connected on ${PORT}`));
