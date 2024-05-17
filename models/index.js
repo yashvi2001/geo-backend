@@ -5,6 +5,7 @@ const Sequelize = require("sequelize");
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.json")[env];
 const geojsondata = require("./geojsondata");
+const user = require("./user");
 const db = {};
 
 let sequelize;
@@ -35,5 +36,14 @@ db.geojsondata = geojsondata(sequelize, Sequelize.DataTypes);
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 db.geojsondata.associate(db);
+
+
+db.user = user;
+db.user = user(sequelize, Sequelize.DataTypes);
+db.user.associate(db);
+
+
+
+
 
 module.exports = db;

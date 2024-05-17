@@ -5,9 +5,53 @@ const multer = require("multer");
 var app = express();
 
 app.use(cors());
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Invalid Route");
+});
+
+//a route to register a user and save the user to the database
+app.post("/register", async (req, res) => {
+  const { useremail, password } = req.body;
+  //if the useremail or password is empty, send a 400 status code
+  if (!useremail || !password) {
+    res.status(400).send("Please provide a useremail and password.");
+    return;
+  }
+  try {
+    //if the useremail already exists, send a 400 status code and a message else create the user
+    const user = await DB.user.findOne({ where: { useremail } });
+    if (user) {
+      res.status(400).send("User already exists.");
+    } else {
+      const newUser = await DB.user.create({ useremail, password });
+
+      res.status(200).send(newUser);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Failed to register user.");
+  }
+});
+
+//a route to login a user
+app.post("/login", (req, res) => {
+  const { useremail, password } = req.body;
+
+  DB.user
+    .findOne({ where: { useremail, password } })
+    .then((user) => {
+      if (user) {
+        res.status(200).send(user);
+      } else {
+        res.status(400).send("Invalid useremail or password.");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Failed to login user.");
+    });
 });
 
 const storage = multer.diskStorage({
