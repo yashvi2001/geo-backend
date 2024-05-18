@@ -2,12 +2,15 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Geojsondata', {
+    await queryInterface.createTable('Geojsons', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
+      },
+      useremail: {
+        type: Sequelize.STRING
       },
       data: {
         type: Sequelize.JSON
@@ -23,6 +26,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Geojsondata');
+    await queryInterface.dropTable('Geojsons');
   }
 };

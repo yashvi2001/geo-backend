@@ -66,6 +66,16 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.post("/upload", upload.single("file"), (req, res) => {
+  //now data will come in req in this format {useremail: "useremail", file: file}
+  const { useremail } = req.body;
+  const file = req.file;
+  console.log(req.body);
+
+  //if the useremail or file is empty, send a 400 status code
+  if (!useremail || !file) {
+    res.status(400).send("Please provide a useremail and file.");
+    return;
+  }
   try {
     if (!req.file) {
       res.status(400).send("Please upload a file.");
@@ -85,7 +95,7 @@ app.post("/upload", upload.single("file"), (req, res) => {
           const geojson = JSON.parse(fs.readFileSync(file.path, "utf8"));
 
           DB.geojsondata
-            .create({ data: geojson })
+            .create({ useremail, data: geojson })
             .then((geojsondata) => {
               res.status(200).send(geojsondata);
             })
@@ -104,7 +114,7 @@ app.post("/upload", upload.single("file"), (req, res) => {
 
             DB.geojsondata
 
-              .create({ data: geojson })
+              .create({ useremail, data: geojson })
               .then((geojsondata) => {
                 res.status(200).send(geojsondata);
               })
@@ -125,7 +135,7 @@ app.post("/upload", upload.single("file"), (req, res) => {
             }
 
             DB.geojsondata
-              .create({ data: geojson })
+              .create({ useremail, data: geojson })
               .then((geojsondata) => {
                 res.status(200).send(geojsondata);
               })
@@ -148,18 +158,12 @@ app.post("/upload", upload.single("file"), (req, res) => {
 //add a route to get all the geojson data
 
 app.get("/data", (req, res) => {
-  DB.geojsondata
-    .findAll()
-    .then((geojsondata) => {
-      //send in the format of id and data
+  const { useremail } = req.query;
 
-      const data = geojsondata.map((geojson) => {
-        return {
-          id: geojson.id,
-          data: geojson.data,
-        };
-      });
-      res.status(200).send(data);
+  DB.geojsondata
+    .findAll({ where: { useremail } })
+    .then((geojsondata) => {
+      res.status(200).send(geojsondata);
     })
     .catch((error) => {
       console.error(error);

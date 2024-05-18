@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Geojsondata extends Model {
+  class Geojson extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,11 +13,12 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Geojsondata.init({
+  Geojson.init({
+    useremail: DataTypes.STRING,
     data: DataTypes.JSON
   }, {
     sequelize,
-    modelName: 'Geojsondata',
+    modelName: 'Geojson',
   });
-  return Geojsondata;
+  return Geojson;
 };

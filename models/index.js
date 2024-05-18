@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.json")[env];
-const geojsondata = require("./geojsondata");
+const geojsondata = require("./geojson");
 const user = require("./user");
 const db = {};
 
