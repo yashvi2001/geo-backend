@@ -26,6 +26,7 @@
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.3",
     "sequelize-cli": "^6.6.2",
+    "sharp": "^0.33.4",
     "togeojson": "^0.16.0"
   }
 }

@@ -2,6 +2,8 @@ const express = require("express");
 const DB = require("./models/index");
 var cors = require("cors");
 const multer = require("multer");
+const fs = require("fs");
+const sharp = require("sharp");
 var app = express();
 
 app.use(cors());
@@ -126,16 +128,13 @@ app.post("/upload", upload.single("file"), (req, res) => {
         }
 
         if (fileType === "tiff") {
-          const tiffToGeoJSON = require("./utils/tiffToGeojson");
+          const fileData = fs.readFileSync(file.path);
+          const pngBuffer = sharp(fileData).png().toBuffer();
 
-          tiffToGeoJSON(file.path, (err, geojson) => {
-            if (err) {
-              console.error(err);
-              return;
-            }
-
+          pngBuffer?.then((data) => {
+            console.log(data);
             DB.geojsondata
-              .create({ useremail, data: geojson })
+              .create({ useremail, data: data })
               .then((geojsondata) => {
                 res.status(200).send(geojsondata);
               })
